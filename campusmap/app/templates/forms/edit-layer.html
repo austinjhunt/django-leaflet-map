@@ -1,0 +1,91 @@
+{% extends 'master.html' %}
+{% block content %}
+<div class="container my-5 py-5">
+    <h1>You are editing the map layer <strong>{{layer.title}}</strong></h1>
+    <hr />
+    <form action="{% url 'edit-layer' layer.id %}" method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title" class="form-label">Layer Title</label>
+            <input type="text" class="form-control" id="title" name="title" value="{{layer.title}}"
+                aria-describedby="title-help">
+            <div id="title-help" class="form-text">Provide a short title for this layer.</div>
+        </div>
+        <div class="mb-3">
+            <label for="description" class="form-label">Layer Description</label>
+            <textarea class="form-control" id="description" name="description"
+                aria-describedby="description-help">{{layer.description}}</textarea>
+            <div id="description-help" class="form-text">
+                <p>
+                    Provide a description of this layer. What kinds locations are represented in this layer?
+                </p>
+            </div>
+        </div>
+        <div class="mb-3">
+            <label for="geojson" class="form-label">GeoJSON</label>
+            <textarea class="form-control" id="geojson" name="geojson" type="text" aria-describedby="geojson-help">
+                {{layer.geojson}}
+            </textarea>
+            <div id="geojson-help" class="form-text">
+                <p>
+                    Use <a href="https://geojson.io" title="geojson.io">geojson.io</a> to draw out your locations for
+                    this layer on a map, then copy the resulting JSON into this field.
+                </p>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="button" class="btn btn-info" onclick="prettyPrintGeoJson()">Prettify JSON</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('geojson').addEventListener('keyup', function (event) {
+        if (event.keyCode === 13) {
+            // enter
+            event.preventDefault();
+            event.stopPropagation();
+
+        }
+    })
+    document.getElementById('geojson').addEventListener('keydown', function (event) {
+        if (event.key === 'Tab') {
+            event.preventDefault();
+            var start = this.selectionStart;
+            var end = this.selectionEnd;
+
+            // set textarea value to: text before caret + tab + text after caret
+            this.value = this.value.substring(0, start) +
+                "\t" + this.value.substring(end);
+
+            // put caret at right position again
+            this.selectionStart =
+                this.selectionEnd = start + 1;
+        }
+    })
+
+
+
+    function prettyPrintGeoJson() {
+        let elem = document.getElementById('geojson');
+        let ugly = elem.value;
+        try {
+            let obj = JSON.parse(ugly);
+            let pretty = JSON.stringify(obj, undefined, 4);
+            elem.value = pretty;
+        } catch (error) { }
+        textAreaAdjust(elem);
+    }
+
+    function textAreaAdjust(element) {
+        element.style.height = "1px";
+        element.style.height = (25 + element.scrollHeight) + "px";
+    }
+    document.onreadystatechange = function () {
+        if (document.readyState === "interactive") {
+            prettyPrintGeoJson();
+        }
+    };
+</script>
+
+
+{% endblock %}

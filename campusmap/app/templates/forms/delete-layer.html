@@ -1,0 +1,65 @@
+{% extends 'master.html' %}
+{% block content %}
+<div class="container my-5 py-5">
+
+    <form action="{% url 'delete-layer' layer.id %}" method="post">
+        {% csrf_token %}
+        <h1>Confirm Deletion</h1>
+        <p>Click the below button to confirm deletion of the map layer <strong>
+                "{{layer.title}}"</strong></p>
+        <hr />
+        <button type="submit" class="btn btn-danger">Delete Layer "{{layer.title}}"</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('geojson').addEventListener('keyup', function (event) {
+        if (event.keyCode === 13) {
+            // enter
+            event.preventDefault();
+            event.stopPropagation();
+
+        }
+    })
+    document.getElementById('geojson').addEventListener('keydown', function (event) {
+        if (event.key === 'Tab') {
+            event.preventDefault();
+            var start = this.selectionStart;
+            var end = this.selectionEnd;
+
+            // set textarea value to: text before caret + tab + text after caret
+            this.value = this.value.substring(0, start) +
+                "\t" + this.value.substring(end);
+
+            // put caret at right position again
+            this.selectionStart =
+                this.selectionEnd = start + 1;
+        }
+    })
+
+
+
+    function prettyPrintGeoJson() {
+        let elem = document.getElementById('geojson');
+        let ugly = elem.value;
+        try {
+            let obj = JSON.parse(ugly);
+            let pretty = JSON.stringify(obj, undefined, 4);
+            elem.value = pretty;
+        } catch (error) { }
+        textAreaAdjust(elem);
+    }
+
+    function textAreaAdjust(element) {
+        element.style.height = "1px";
+        element.style.height = (25 + element.scrollHeight) + "px";
+    }
+    document.onreadystatechange = function () {
+        if (document.readyState === "interactive") {
+            prettyPrintGeoJson();
+        }
+    };
+</script>
+
+
+{% endblock %}

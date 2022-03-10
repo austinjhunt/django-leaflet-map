@@ -1,0 +1,30 @@
+{% extends 'master.html' %}
+{% block content %}
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col text-start">
+            <h1>Manage Layers</h1>
+        </div>
+        <div class="col text-end">
+            <a href="{% url 'create-layer' %}" title="Create layer" class="btn btn-success btn-sm">Add Layer</a>
+        </div>
+    </div>
+
+    <hr />
+    <ol class="list-group list-group-numbered">
+        {% for layer in layers %}
+        <li class="list-group-item d-flex justify-content-between align-items-start">
+            <div class="ms-2 me-auto">
+                <div class="fw-bold">{{layer.title}}</div>
+                {{layer.description}}
+            </div>
+            <a title="edit layer" href="{% url 'edit-layer' layer.id %}" class="btn btn-sm mx-1 btn-secondary">Edit</a>
+            <a title="edit layer" href="{% url 'delete-layer' layer.id %}" class="btn btn-sm mx-1 btn-danger">Delete</a>
+        </li>
+        {% endfor %}
+    </ol>
+</div>
+
+
+{% endblock %}

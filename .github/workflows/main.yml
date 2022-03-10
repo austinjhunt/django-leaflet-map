@@ -1,0 +1,32 @@
+name: Rebuild, push, and redeploy Docker Image for Campus Map
+on:
+  push:
+    branches:
+      - "master"
+  pull_request:
+    branches:
+      - "master"
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+# jobs:
+#   RedeployIHM:
+#     runs-on: [self-hosted]
+#     steps:
+#       - uses: actions/checkout@v2
+
+#       - name: Who is action running as?
+#         run: whoami
+
+#       - name: Log into Docker Hub
+#         run: docker login --password ${{ secrets.DOCKERHUB_TOKEN }} --username ${{ secrets.DOCKERHUB_USERNAME }}
+
+#       - name: Build docker image
+#         working-directory: ./
+#         run: docker-compose build httpsrv
+
+#       - name: Push docker image
+#         working-directory: ./
+#         run: docker-compose push httpsrv
+
+#       - name: Hit redeploy webhook URL on production server
+#         run: ${{ secrets.REDEPLOY_CURL_COMMAND }}
