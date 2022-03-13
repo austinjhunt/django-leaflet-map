@@ -112,3 +112,13 @@ class GetLayerView(View):
                     'geojson': fc.geojson
                 }
         return JsonResponse(data, safe=False)
+
+class GetMapboxConfig(View, LoginRequiredMixin):
+    def get(self, request): 
+        data = {
+            'accessToken': settings.MAPBOX_ACCESS_TOKEN, 
+            'center' : settings.MAPBOX_CENTER_COORDINATES,
+            'zoom': settings.MAPBOX_INITIAL_ZOOM,
+            'username': settings.MAPBOX_USERNAME
+        }
+        return JsonResponse(data) 

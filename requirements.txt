@@ -1,0 +1,15 @@
+asgiref==3.5.0
+backports.zoneinfo==0.2.1
+certifi==2021.10.8
+charset-normalizer==2.0.12
+cssmin==0.2.0
+Django==4.0.3
+django-appconf==1.0.5
+django-compressor==3.1
+idna==3.3
+jsmin==3.0.1
+rcssmin==1.1.0
+requests==2.27.1
+rjsmin==1.2.0
+sqlparse==0.4.2
+urllib3==1.26.8

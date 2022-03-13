@@ -27,17 +27,21 @@
     {% endcompress %}
 </head>
 
-<style>
-    .navbar .navbar-toggler .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0,0,0, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
-    }
-</style>
 <script>
     CSRF_TOKEN = "{{ csrf_token }}";
 </script>
 
 <body id="body">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <script>
+        var page = "{{ page }}";
+        var status = "{{ status }}";
+    </script>
+
+
+
+    {% block content %} {% endblock %}
+
+    <nav class="navbar navbar-expand-sm navbar-light bg-light fixed-bottom">
         <div class="container-fluid">
             <a class="navbar-brand" href="{% url 'home' %}">{{app_title}}</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
@@ -47,23 +51,44 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <ul class="navbar-nav">
                     {% if layers %}
-                    <li class="nav-item dropdown ">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    <li class="nav-item dropup ">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown-menu-link-layers" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
-                            Map Layers
+                            Choose a Layer
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-
+                        <ul class="dropdown-menu" id="layers-dropdown-list" aria-labelledby="dropdown-menu-link-layers">
                             {% for layer in layers %}
                             <li><button onclick="activateLayer('{{layer.id}}')"
                                     data-active="{% if forloop.counter == 1 %}1{%else%}0{%endif%}"
-                                    id="layer-{{layer.id}}-toggle"
-                                    class="dropdown-item btn btn-sm {% if forloop.counter == 1 %}btn-primary{%else%}btn-ligt{%endif%}">{{layer.title}}</button>
+                                    data-layerid="{{layer.id}}" id="layer-{{layer.id}}-toggle"
+                                    class="dropdown-item btn btn-sm">{{layer.title}}</button>
                             </li>
                             {% endfor %}
                         </ul>
                     </li>
                     {% endif %}
+
+                    {% if styles %}
+                    <li class="nav-item dropup ">
+                        <a class="nav-link dropdown-toggle" href="#" id="dropdown-menu-link-styles" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Choose a Style
+                        </a>
+                        <ul class="dropdown-menu" id="styles-dropdown-list" aria-labelledby="dropdown-menu-link-styles">
+
+                            {% for style in styles %}
+                            <li><button onclick="activateStyle('{{mapbox_username}}/{{style.id}}')"
+                                    data-active="{% if forloop.counter == 1 %}1{%else%}0{%endif%}"
+                                    data-styleid="{{mapbox_username}}/{{style.id}}"
+                                    id="style-{{mapbox_username}}/{{style.id}}-toggle" class="dropdown-item btn btn-sm">
+                                    {{style.name}}
+                                </button>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </li>
+                    {% endif %}
+
                     {% if user.is_staff %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'create-layer' %}">Add Layer</a>
@@ -77,24 +102,6 @@
             </div>
         </div>
     </nav>
-    <script>
-        var page = "{{ page }}";
-        var status = "{{ status }}";
-    </script>
-
-
-
-    {% block content %} {% endblock %}
-    <!-- /#pg  -->
-
-    <!--[if lt IE 9]>
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
-    <script>
-        var page = "{{ page }}";
-
-        var status = "{{ status }}";
-    </script>
 
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
@@ -107,6 +114,7 @@
     {% compress js %}
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
     {% endcompress %}
+
 
 
 </body>

@@ -28,7 +28,7 @@ DEBUG = os.environ.get('DEBUG', True)
 
 ALLOWED_HOSTS = ['localhost','127.0.0.1']
 
- 
+APP_NAME = 'CofC Map'
 
 
 # Application definition
@@ -141,3 +141,13 @@ STATICFILES_FINDERS = (
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# MAPBOX 
+# make sure access token has STYLES:LIST scope 
+from .mapbox import list_styles
+MAPBOX_ACCESS_TOKEN = "sk.eyJ1IjoiaHVudGFqIiwiYSI6ImNsMG9qa3o5ZTFxb2ozY3VvOGQ0aXFvMmMifQ.v65G6hgvszmr9ta9NFHT-w"
+MAPBOX_USERNAME = "huntaj"
+MAPBOX_CENTER_COORDINATES = [32.78400711978337, -79.93746489286423]
+MAPBOX_INITIAL_ZOOM = 17 
+MAPBOX_STYLES_LIST = list_styles()

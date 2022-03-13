@@ -20,3 +20,4 @@ class UserGroup(models.Model):
     """ 
     users = models.ManyToManyField(User)   
     feature_collection = models.ForeignKey(FeatureCollection, on_delete=models.CASCADE)
+ 
